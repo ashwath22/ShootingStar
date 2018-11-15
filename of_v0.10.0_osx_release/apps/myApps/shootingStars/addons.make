@@ -1,0 +1,4 @@
+ofxFboBlur
+ofxGui
+ofxOsc
+ofxXmlSettings
