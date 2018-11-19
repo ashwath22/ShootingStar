@@ -1,7 +1,7 @@
 #include "ofApp.h"
 
 //Listen to localhost
-#define HOST "192.168.2.84"
+#define HOST "192.168.2.54"
 
 //create osc message object
 ofxOscMessage m;
@@ -27,14 +27,14 @@ void Params::setup() {
     friction = 0.15;
     
     eCenter2 = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad2 = 20000;
-    velRad2 = 300;
-    lifeTime2 = 1.0;
-    rotate2 = 2;
+    eRad2 = 2000;
+    velRad2 = 1000;
+    lifeTime2 = 10.0;
+    rotate2 = 120;
     
-    force2 = 0;
-    spinning2 = 0;
-    friction2 = 0.001;
+    force2 = 100;
+    spinning2 = 100;
+    friction2 = 0.15;
     
 }
 
@@ -159,7 +159,7 @@ void Particle::draw(){
     }
 }
 void Particle::draw2(){
-    peak3.play();
+//    peak3.play();
     if ( live2 ) {
         //Compute size
         float size = ofMap(
@@ -201,8 +201,8 @@ void ofApp::setup(){
     
     time0 = ofGetElapsedTimef();
     history2 = 10.0;
-    bornRate2 = 1;
-    bornCount2 = 1;
+    bornRate2 = 0.1;
+    bornCount2 = 0.1;
     bgm.load("Nostalgia v2.mp3");
     bgm.setLoop(true);
     bgm.play();
@@ -210,6 +210,8 @@ void ofApp::setup(){
     peak1.load("peak v1.mp3");
     peak1.setVolume(0.2);
     peak2.load("peak v2A.mp3");
+    
+//    peak3.setMultiPlay(true);
     peak3.load("peak v2B.mp3");
     peak3.setVolume(0.2);
     
@@ -298,9 +300,12 @@ void ofApp::draw(){
     
     //Draw the particles
     ofFill();
+    if (msg[0] > 0.5) {
+        peak3.play();
+    }
     for (int i=0; i<p.size(); i++) {
         p[i].draw();
-        if (msg[0] > 0.4) {
+        if (msg[0] > 0.5) {
             p[i].draw2();
         }
     }
