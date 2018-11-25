@@ -8,7 +8,9 @@ public:
     Particle();                //Class constructor
     void setup();              //Start particle
     void update( float dt );   //Recalculate physics
-    void draw();               //Draw particle
+    void draw();//Draw particle
+    void setup2();              //Start particle
+    void update2( float dt );   //Recalculate physics
     void draw2();               //Draw particle
     
     ofPoint pos;               //Position
@@ -59,6 +61,16 @@ public:
 
 extern Params params; //Declaration a of global variable
 
+class SoundThread : public ofThread {
+    // the thread function
+    void threadedFunction();
+    ofSoundPlayer peak3;
+};
+
+class ToggleThread : public ofThread {
+    // the thread function
+    void threadedFunction();
+};
 
 //openFrameworks' class
 class ofApp : public ofBaseApp{
@@ -89,4 +101,7 @@ public:
     ofSoundPlayer valley1;
     ofSoundPlayer valley2;
     ofSoundPlayer valley3;
+    
+    SoundThread thread;
+    ToggleThread thread2;
 };

@@ -1,13 +1,14 @@
 #include "ofApp.h"
 
 //Listen to localhost
-#define HOST "192.168.2.54"
+#define HOST "192.168.2.62"
 
 //create osc message object
 ofxOscMessage m;
 string incomingAddr;
 float incomingVal;
 float msg[4];
+long int timer;
 int toggle = 0;
 
 //--------------------------------------------------------------
@@ -109,9 +110,6 @@ void Particle::update( float dt ){
         }
     }
     if ( live2 ) {
-//        if (msg[0] > 0.4) {
-//            peak1.play();
-//        }
         //Rotate vel2 for shooting stars
         vel2.rotate( 0, 0, param.rotate2 * dt );
         
@@ -203,6 +201,7 @@ void ofApp::setup(){
     history2 = 10.0;
     bornRate2 = 0.1;
     bornCount2 = 0.1;
+//    bgm.setMultiPlay(true);
     bgm.load("Nostalgia v2.mp3");
     bgm.setLoop(true);
     bgm.play();
@@ -213,12 +212,14 @@ void ofApp::setup(){
     
 //    peak3.setMultiPlay(true);
     peak3.load("peak v2B.mp3");
-    peak3.setVolume(0.2);
+    peak3.setVolume(0.5);
     
     valley1.load("valley v1.mp3");
     valley2.load("valley v2A.mp3");
     valley3.load("valley v2B.mp3");
     
+    bgm.setMultiPlay(false);
+    peak3.setMultiPlay(true);
 }
 
 //--------------------------------------------------------------
@@ -255,9 +256,6 @@ void ofApp::update(){
     }
     
     //Born new particles
-//    if (msg[0] > 0.4) {
-//        peak1.play();
-//    }
     bornCount += dt * bornRate;      //Update bornCount value
     if ( bornCount >= 1 ) {          //It's time to born particle(s)
         int bornN = int( bornCount );//How many born
@@ -276,13 +274,38 @@ void ofApp::update(){
     
 
 }
-void ofApp::playPeak3(){
-    peak3.play();
+
+void SoundThread::threadedFunction() {
+//    int toggle2 = 0;
+    peak3.load("peak v2B.mp3");
+    peak3.setVolume(0.2);
+    peak3.setMultiPlay(true);
+
+    while(isThreadRunning() && toggle == 0) {
+        peak3.play();
+        toggle=1;
+    }
+    
 }
+    
+
+void ToggleThread::threadedFunction() {
+        timer = (int)ofGetElapsedTimef();
+        while((int)ofGetElapsedTimef() - timer < 10 ){
+        }
+        toggle=0;
+        timer=0;
+    }
+
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground( 255);  //Set white background
-    
+    if (msg[0] > 0.5) {
+        if (toggle == 0){
+            thread.startThread();
+            thread2.startThread();
+        }
+    }
     //1. Drawing to buffer
     fbo.begin();
     
@@ -300,24 +323,25 @@ void ofApp::draw(){
     
     //Draw the particles
     ofFill();
-    if (msg[0] > 0.5) {
-        peak3.play();
-    }
+//    int toggle =0;
     for (int i=0; i<p.size(); i++) {
-        p[i].draw();
         if (msg[0] > 0.5) {
             p[i].draw2();
         }
+        else {
+            p[i].draw();
+        }
     }
-    
     fbo.end();
-    
     //2. Draw buffer on the screen
     ofSetColor( 255, 255, 255 );
     fbo.draw( 0, 0 );
     
     ofDrawBitmapString("beta 1: " + ofToString(msg[0]), 0, 30);
-    ofDrawBitmapString("beta 2: " + ofToString(msg[1]), 0, 40);
-    ofDrawBitmapString("beta 3: " + ofToString(msg[2]), 0, 50);
-    ofDrawBitmapString("beta 4: " + ofToString(msg[3]), 0, 60);
+    ofDrawBitmapString("timer: " + ofToString(timer), 0, 40);
+    ofDrawBitmapString("toggle: " + ofToString(toggle), 0, 50);
+    ofDrawBitmapString("elapsed time: " + ofToString((int)ofGetElapsedTimef()), 0, 60);
+//    ofDrawBitmapString("beta 2: " + ofToString(msg[1]), 0, 40);
+//    ofDrawBitmapString("beta 3: " + ofToString(msg[2]), 0, 50);
+//    ofDrawBitmapString("beta 4: " + ofToString(msg[3]), 0, 60);
 }
