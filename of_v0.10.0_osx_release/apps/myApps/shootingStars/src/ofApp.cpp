@@ -1,7 +1,8 @@
 #include "ofApp.h"
 
 //Listen to localhost
-#define HOST "192.168.2.62"
+//#define HOST "10.0.0.58"
+#define HOST "192.168.2.58"
 
 //create osc message object
 ofxOscMessage m;
@@ -11,6 +12,7 @@ float msg[4];
 long int timer;
 int toggle = 0;
 
+int track = 2;
 //--------------------------------------------------------------
 //----------------------  Params -------------------------------
 //--------------------------------------------------------------
@@ -18,20 +20,20 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 1000;
+    eRad = 500;
     velRad = 1000;
     lifeTime = 10.0;
     rotate = 120;
     
-    force = 100;
+    force = 1000;
     spinning = 100;
-    friction = 0.15;
+    friction = 0.1;
     
     eCenter2 = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad2 = 2000;
-    velRad2 = 1000;
+    eRad2 = 12000;
+    velRad2 = 7000;
     lifeTime2 = 10.0;
-    rotate2 = 120;
+    rotate2 = 100;
     
     force2 = 100;
     spinning2 = 100;
@@ -135,7 +137,7 @@ void Particle::update( float dt ){
         //Update time and check if particle should die
         time2 += dt;
         if ( time2 >= lifeTime2 ) {
-            live2 = false;   //Particle is now considered as died
+            live2 = false;   //Particle is now died
         }
     }
 }
@@ -148,8 +150,8 @@ void Particle::draw(){
                            fabs(time - lifeTime/2), 0, lifeTime/2, 1, 0 );
         
         //Compute color
-        ofColor color = ofColor::red;
-        float hue = ofMap( time, 0, lifeTime, 180, 255 );
+        ofColor color = ofColor::yellow;
+        float hue = ofMap( time, 0, lifeTime, 120, 190 );
         color.setHue( hue );
         ofSetColor( color );
         
@@ -161,11 +163,11 @@ void Particle::draw2(){
     if ( live2 ) {
         //Compute size
         float size = ofMap(
-                           fabs(time - lifeTime2/2), 0, lifeTime2/2, 1, 0 );
+                           fabs(time - lifeTime2/2), 0, lifeTime2/2, 0, 1 );
         
         //Compute color
         ofColor color = ofColor::white;
-        float hue = ofMap( time, 0, lifeTime, 180, 255 );
+        float hue = ofMap( time, 0, lifeTime, 10, 11 );
         color.setHue( hue );
         ofSetColor( color );
         
@@ -194,32 +196,19 @@ void ofApp::setup(){
     //Set up parameters
     param.setup();        //Global parameters
     history = 10.0;
-    bornRate = 100;
+    bornRate = 80;
     bornCount = 10;
     
     time0 = ofGetElapsedTimef();
-    history2 = 10.0;
-    bornRate2 = 0.1;
-    bornCount2 = 0.1;
+    history2 = 0.001;
+    bornRate2 = 0.01;
+    bornCount2 = 10;
 //    bgm.setMultiPlay(true);
-    bgm.load("Nostalgia v2.mp3");
-    bgm.setLoop(true);
-    bgm.play();
+//    bgm.load("Nostalgia v2.mp3");
+//    bgm.setLoop(true);
+//    bgm.play();
+//    thread2.startThread();
     
-    peak1.load("peak v1.mp3");
-    peak1.setVolume(0.2);
-    peak2.load("peak v2A.mp3");
-    
-//    peak3.setMultiPlay(true);
-    peak3.load("peak v2B.mp3");
-    peak3.setVolume(0.5);
-    
-    valley1.load("valley v1.mp3");
-    valley2.load("valley v2A.mp3");
-    valley3.load("valley v2B.mp3");
-    
-    bgm.setMultiPlay(false);
-    peak3.setMultiPlay(true);
 }
 
 //--------------------------------------------------------------
@@ -272,22 +261,90 @@ void ofApp::update(){
         p[i].update( dt );
     }
     
+    bornCount2 += dt * bornRate2;      //Update bornCount value
+    if ( bornCount2 >= 1 ) {          //It's time to born particle(s)
+        int bornN2 = int( bornCount2 );//How many born
+        bornCount2 -= bornN2;          //Correct bornCount value
+        for (int i=0; i<bornN2; i++) {
+            Particle newP2;
+            newP2.setup();            //Start a new particle
+            p.push_back( newP2 );     //Add this particle to array
+        }
+    }
+    
+    //Update the particles
+    for (int i=0; i<p.size(); i++) {
+        p[i].update( dt );
+    }
+    
+//        thread.lock();
+        if (msg[0] > 0.51) {
+            if (toggle == 0){
+                thread.startThread();
+                thread2.startThread();
+            }
+        }
+//        thread.unlock();
 
+    
 }
 
 void SoundThread::threadedFunction() {
-//    int toggle2 = 0;
-    peak3.load("peak v2B.mp3");
+    
+    peak1.load("peak 1.wav");
+    peak1.setVolume(0.2);
+    peak1.setMultiPlay(true);
+    peak2.load("peak 2A.wav");
+    peak2.setVolume(0.2);
+    peak2.setMultiPlay(true);
+    peak3.load("peak 2B.wav");
     peak3.setVolume(0.2);
     peak3.setMultiPlay(true);
-
+    peak4.load("peak 3A.wav");
+    peak4.setVolume(0.2);
+    peak4.setMultiPlay(true);
+    peak5.load("peak 3B.wav");
+    peak5.setVolume(0.2);
+    peak5.setMultiPlay(true);
+    peak6.load("peak 3C.wav");
+    peak6.setVolume(0.2);
+    peak6.setMultiPlay(true);
+    peak7.load("peak 3D.wav");
+    peak7.setVolume(0.2);
+    peak7.setMultiPlay(true);
     while(isThreadRunning() && toggle == 0) {
-        peak3.play();
+        lock();
+        switch (track) {
+            case 1:
+                peak1.play();
+                track = 2;
+                break;
+            case 2:
+                peak2.play();
+                track = 3;
+                break;
+            case 3:
+                peak3.play();
+                track = 2;
+                break;
+            case 4:
+                peak1.play();
+                track = 5;
+                break;
+            case 5:
+                peak2.play();
+                track = 6;
+                break;
+            case 6:
+                peak3.play();
+                track = 1;
+                break;
+        }
         toggle=1;
+        unlock();
     }
     
 }
-    
 
 void ToggleThread::threadedFunction() {
         timer = (int)ofGetElapsedTimef();
@@ -300,12 +357,14 @@ void ToggleThread::threadedFunction() {
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground( 255);  //Set white background
-    if (msg[0] > 0.5) {
-        if (toggle == 0){
-            thread.startThread();
-            thread2.startThread();
-        }
-    }
+//    thread.lock();
+//    if (msg[0] >0.5) {
+//        if (toggle == 0){
+//            thread.startThread();
+//            thread2.startThread();
+//        }
+//    }
+//    thread.unlock();
     //1. Drawing to buffer
     fbo.begin();
     
@@ -325,23 +384,31 @@ void ofApp::draw(){
     ofFill();
 //    int toggle =0;
     for (int i=0; i<p.size(); i++) {
-        if (msg[0] > 0.5) {
-            p[i].draw2();
+        if (msg[0] > 0.51) {
+//            if (toggle == 0){
+                p[i].draw2();
+//            }
         }
-        else {
+//        else {
             p[i].draw();
-        }
+//        }
     }
     fbo.end();
     //2. Draw buffer on the screen
     ofSetColor( 255, 255, 255 );
     fbo.draw( 0, 0 );
     
-    ofDrawBitmapString("beta 1: " + ofToString(msg[0]), 0, 30);
-    ofDrawBitmapString("timer: " + ofToString(timer), 0, 40);
-    ofDrawBitmapString("toggle: " + ofToString(toggle), 0, 50);
-    ofDrawBitmapString("elapsed time: " + ofToString((int)ofGetElapsedTimef()), 0, 60);
-//    ofDrawBitmapString("beta 2: " + ofToString(msg[1]), 0, 40);
-//    ofDrawBitmapString("beta 3: " + ofToString(msg[2]), 0, 50);
-//    ofDrawBitmapString("beta 4: " + ofToString(msg[3]), 0, 60);
+    ofDrawBitmapString("beta 1: " + ofToString(msg[0]), 4, 30);
+    ofDrawBitmapString("beta 3: " + ofToString(msg[2]), 4, 40);
+    ofDrawBitmapString("beta 2: " + ofToString(msg[1]), 4, 50);
+    ofDrawBitmapString("beta 4: " + ofToString(msg[3]), 4, 60);
+
+    ofDrawBitmapString("timer: " + ofToString(timer), 4, 70);
+    ofDrawBitmapString("toggle: " + ofToString(toggle), 4, 80);
+    ofDrawBitmapString("elapsed time: " + ofToString((int)ofGetElapsedTimef()), 4, 90);
+}
+
+void ofApp::exit() {
+    // stop the thread
+    thread.stopThread();
 }

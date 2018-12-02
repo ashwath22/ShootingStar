@@ -64,7 +64,13 @@ extern Params params; //Declaration a of global variable
 class SoundThread : public ofThread {
     // the thread function
     void threadedFunction();
+    ofSoundPlayer peak1;
+    ofSoundPlayer peak2;
     ofSoundPlayer peak3;
+    ofSoundPlayer peak4;
+    ofSoundPlayer peak5;
+    ofSoundPlayer peak6;
+    ofSoundPlayer peak7;
 };
 
 class ToggleThread : public ofThread {
@@ -79,6 +85,7 @@ public:
     void update();
     void draw();
     void playPeak3();
+    void exit();
     
     vector<Particle> p;      //Particles
     ofFbo fbo;            //Off-screen buffer for trails
