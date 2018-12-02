@@ -20,12 +20,12 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 5000;
+    eRad = 2000;
     velRad = 1000;
     lifeTime = 50.0;
-    rotate = 330;
+    rotate = -220;
     
-    force = 200;
+    force = -200;
     spinning = 100;
     friction = 0.1;
     
@@ -82,7 +82,7 @@ void Particle::setup() {
 void Particle::update( float dt ){
     ofSoundUpdate();
     if ( live ) {
-//        Rotate vel
+        //        Rotate vel
         
         vel.rotate( 0, 0, param.rotate * dt );
         
@@ -151,7 +151,7 @@ void Particle::draw(){
         
         //Compute color
         ofColor color = ofColor::yellow;
-        float hue = ofMap( time, 0, lifeTime, 220, 255 );
+        float hue = ofMap( time, 0, lifeTime, 150, 255 );
         color.setHue( hue );
         ofSetColor( color );
         
@@ -159,7 +159,7 @@ void Particle::draw(){
     }
 }
 void Particle::draw2(){
-//    peak3.play();
+    //    peak3.play();
     if ( live2 ) {
         //Compute size
         float size = ofMap(
@@ -203,11 +203,11 @@ void ofApp::setup(){
     history2 = 0.001;
     bornRate2 = 0.01;
     bornCount2 = 10;
-//    bgm.setMultiPlay(true);
-//    bgm.load("Nostalgia v2.mp3");
-//    bgm.setLoop(true);
-//    bgm.play();
-//    thread2.startThread();
+    //    bgm.setMultiPlay(true);
+    //    bgm.load("Nostalgia v2.mp3");
+    //    bgm.setLoop(true);
+    //    bgm.play();
+    //    thread2.startThread();
     
 }
 
@@ -277,15 +277,15 @@ void ofApp::update(){
         p[i].update( dt );
     }
     
-//        thread.lock();
-        if (msg[0] > 0.5) {
-            if (toggle == 0){
-                thread.startThread();
-                thread2.startThread();
-            }
+    //        thread.lock();
+    if (msg[0] > 0.5) {
+        if (toggle == 0){
+            thread.startThread();
+            thread2.startThread();
         }
-//        thread.unlock();
-
+    }
+    //        thread.unlock();
+    
     
 }
 
@@ -347,24 +347,24 @@ void SoundThread::threadedFunction() {
 }
 
 void ToggleThread::threadedFunction() {
-        timer = (int)ofGetElapsedTimef();
-        while((int)ofGetElapsedTimef() - timer < 10 ){
-        }
-        toggle=0;
-        timer=0;
+    timer = (int)ofGetElapsedTimef();
+    while((int)ofGetElapsedTimef() - timer < 10 ){
     }
+    toggle=0;
+    timer=0;
+}
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground( 255);  //Set white background
-//    thread.lock();
-//    if (msg[0] >0.5) {
-//        if (toggle == 0){
-//            thread.startThread();
-//            thread2.startThread();
-//        }
-//    }
-//    thread.unlock();
+    //    thread.lock();
+    //    if (msg[0] >0.5) {
+    //        if (toggle == 0){
+    //            thread.startThread();
+    //            thread2.startThread();
+    //        }
+    //    }
+    //    thread.unlock();
     //1. Drawing to buffer
     fbo.begin();
     
@@ -382,16 +382,16 @@ void ofApp::draw(){
     
     //Draw the particles
     ofFill();
-//    int toggle =0;
+    //    int toggle =0;
     for (int i=0; i<p.size(); i++) {
         if (msg[0] > 0.5) {
-//            if (toggle == 0){
-                p[i].draw2();
-//            }
+            //            if (toggle == 0){
+            p[i].draw2();
+            //            }
         }
-//        else {
-            p[i].draw();
-//        }
+        //        else {
+        p[i].draw();
+        //        }
     }
     fbo.end();
     //2. Draw buffer on the screen
@@ -402,7 +402,7 @@ void ofApp::draw(){
     ofDrawBitmapString("beta 3: " + ofToString(msg[2]), 4, 40);
     ofDrawBitmapString("beta 2: " + ofToString(msg[1]), 4, 50);
     ofDrawBitmapString("beta 4: " + ofToString(msg[3]), 4, 60);
-
+    
     ofDrawBitmapString("timer: " + ofToString(timer), 4, 70);
     ofDrawBitmapString("toggle: " + ofToString(toggle), 4, 80);
     ofDrawBitmapString("elapsed time: " + ofToString((int)ofGetElapsedTimef()), 4, 90);
