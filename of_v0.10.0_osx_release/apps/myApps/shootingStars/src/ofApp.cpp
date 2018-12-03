@@ -12,7 +12,7 @@ float msg[4];
 long int timer;
 int toggle = 0;
 
-int track = 5;
+int track = 4;
 //--------------------------------------------------------------
 //----------------------  Params -------------------------------
 //--------------------------------------------------------------
@@ -20,14 +20,14 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 500;
-    velRad = 25;
+    eRad = 3000;
+    velRad = 300;
     lifeTime = 5.0;
     rotate = 360;
     
     force = 0;
     spinning = 0;
-    friction = 0.0;
+    friction = 0.01;
     
     eCenter2 = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
     eRad2 = 12000;
@@ -278,7 +278,7 @@ void ofApp::update(){
     }
     
     //        thread.lock();
-    if (msg[0] > 0.75) {
+    if (msg[0] > 0.7) {
         if (toggle == 0){
             thread.startThread();
             thread2.startThread();
@@ -328,16 +328,16 @@ void SoundThread::threadedFunction() {
                 track = 2;
                 break;
             case 4:
-                peak1.play();
+                peak5.play();
                 track = 5;
                 break;
             case 5:
-                peak2.play();
+                peak6.play();
                 track = 6;
                 break;
             case 6:
-                peak3.play();
-                track = 5;
+                peak7.play();
+                track = 4;
                 break;
         }
         toggle=1;
@@ -384,7 +384,7 @@ void ofApp::draw(){
     ofFill();
     //    int toggle =0;
     for (int i=0; i<p.size(); i++) {
-        if (msg[0] > 0.75) {
+        if (msg[0] > 0.7) {
             //            if (toggle == 0){
             p[i].draw2();
             //            }
