@@ -12,7 +12,7 @@ float msg[4];
 long int timer;
 int toggle = 0;
 
-int track = 4;
+int track = 5;
 //--------------------------------------------------------------
 //----------------------  Params -------------------------------
 //--------------------------------------------------------------
@@ -20,12 +20,12 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 700;
+    eRad = 800;
     velRad = 1000;
-    lifeTime = 10.0;
-    rotate = 120;
+    lifeTime = 50.0;
+    rotate = 330;
     
-    force = 1000;
+    force = 200;
     spinning = 100;
     friction = 0.1;
     
@@ -151,7 +151,7 @@ void Particle::draw(){
         
         //Compute color
         ofColor color = ofColor::yellow;
-        float hue = ofMap( time, 0, lifeTime, 170, 255 );
+        float hue = ofMap( time, 0, lifeTime, 170, 190 );
         color.setHue( hue );
         ofSetColor( color );
         
@@ -196,8 +196,8 @@ void ofApp::setup(){
     //Set up parameters
     param.setup();        //Global parameters
     history = 10.0;
-    bornRate = 80;
-    bornCount = 10;
+    bornRate = 20;
+    bornCount = 20;
     
     time0 = ofGetElapsedTimef();
     history2 = 0.001;
@@ -278,7 +278,7 @@ void ofApp::update(){
     }
     
     //        thread.lock();
-    if (msg[0] > 0.8) {
+    if (msg[0] > 0.85) {
         if (toggle == 0){
             thread.startThread();
             thread2.startThread();
@@ -328,16 +328,16 @@ void SoundThread::threadedFunction() {
                 track = 2;
                 break;
             case 4:
-                peak5.play();
+                peak1.play();
                 track = 5;
                 break;
             case 5:
-                peak6.play();
+                peak2.play();
                 track = 6;
                 break;
             case 6:
-                peak7.play();
-                track = 4;
+                peak3.play();
+                track = 5;
                 break;
         }
         toggle=1;
@@ -384,7 +384,7 @@ void ofApp::draw(){
     ofFill();
     //    int toggle =0;
     for (int i=0; i<p.size(); i++) {
-        if (msg[0] > 0.8) {
+        if (msg[0] > 0.85) {
             //            if (toggle == 0){
             p[i].draw2();
             //            }
