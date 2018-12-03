@@ -20,14 +20,14 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 600;
-    velRad = 200;
-    lifeTime = 5.0;
-    rotate = 140;
+    eRad = 700;
+    velRad = 1000;
+    lifeTime = 10.0;
+    rotate = 120;
     
-    force = 0;
+    force = 1000;
     spinning = 100;
-    friction = 0.2;
+    friction = 0.1;
     
     eCenter2 = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
     eRad2 = 12000;
@@ -196,7 +196,7 @@ void ofApp::setup(){
     //Set up parameters
     param.setup();        //Global parameters
     history = 10.0;
-    bornRate = 50;
+    bornRate = 80;
     bornCount = 10;
     
     time0 = ofGetElapsedTimef();
