@@ -2,7 +2,7 @@
 
 //Listen to localhost
 //#define HOST "10.0.0.58"
-#define HOST "192.168.2.60"
+#define HOST "192.168.2.58"
 
 //create osc message object
 ofxOscMessage m;
@@ -20,14 +20,14 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 500;
-    velRad = 1200;
-    lifeTime = 10.0;
-    rotate = -360;
+    eRad = 600;
+    velRad = 200;
+    lifeTime = 5.0;
+    rotate = 140;
     
-    force = -100;
-    spinning = -100;
-    friction = 0.05;
+    force = 0;
+    spinning = 100;
+    friction = 0.2;
     
     eCenter2 = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
     eRad2 = 12000;
@@ -37,7 +37,7 @@ void Params::setup() {
     
     force2 = 1000;
     spinning2 = 100;
-    friction2 = 0.15;
+    friction2 = 0.1;
     
 }
 
@@ -151,7 +151,7 @@ void Particle::draw(){
         
         //Compute color
         ofColor color = ofColor::yellow;
-        float hue = ofMap( time, 0, lifeTime, 0, 120 );
+        float hue = ofMap( time, 0, lifeTime, 170, 255 );
         color.setHue( hue );
         ofSetColor( color );
         
@@ -196,8 +196,8 @@ void ofApp::setup(){
     //Set up parameters
     param.setup();        //Global parameters
     history = 10.0;
-    bornRate = 3;
-    bornCount = 2;
+    bornRate = 50;
+    bornCount = 10;
     
     time0 = ofGetElapsedTimef();
     history2 = 0.001;
@@ -278,7 +278,7 @@ void ofApp::update(){
     }
     
     //        thread.lock();
-    if (msg[0] > 0.9) {
+    if (msg[0] > 0.8) {
         if (toggle == 0){
             thread.startThread();
             thread2.startThread();
@@ -384,7 +384,7 @@ void ofApp::draw(){
     ofFill();
     //    int toggle =0;
     for (int i=0; i<p.size(); i++) {
-        if (msg[0] > 0.9) {
+        if (msg[0] > 0.8) {
             //            if (toggle == 0){
             p[i].draw2();
             //            }
