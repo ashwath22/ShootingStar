@@ -20,13 +20,13 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 1200;
+    eRad = 500;
     velRad = 1200;
     lifeTime = 10.0;
     rotate = -360;
     
-    force = 100;
-    spinning = 100;
+    force = -100;
+    spinning = -100;
     friction = 0.05;
     
     eCenter2 = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
@@ -151,7 +151,7 @@ void Particle::draw(){
         
         //Compute color
         ofColor color = ofColor::yellow;
-        float hue = ofMap( time, 0, lifeTime, 10, 80 );
+        float hue = ofMap( time, 0, lifeTime, 0, 120 );
         color.setHue( hue );
         ofSetColor( color );
         
@@ -196,8 +196,8 @@ void ofApp::setup(){
     //Set up parameters
     param.setup();        //Global parameters
     history = 10.0;
-    bornRate = 10;
-    bornCount = 10;
+    bornRate = 3;
+    bornCount = 2;
     
     time0 = ofGetElapsedTimef();
     history2 = 0.001;
