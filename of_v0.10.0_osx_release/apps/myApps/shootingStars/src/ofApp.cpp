@@ -12,7 +12,7 @@ float msg[4];
 long int timer;
 int toggle = 0;
 
-int track = 2;
+int track = 4;
 //--------------------------------------------------------------
 //----------------------  Params -------------------------------
 //--------------------------------------------------------------
@@ -23,11 +23,11 @@ void Params::setup() {
     eRad = 1200;
     velRad = 1200;
     lifeTime = 10.0;
-    rotate = 140;
+    rotate = -360;
     
-    force = 1000;
+    force = 100;
     spinning = 100;
-    friction = 0.5;
+    friction = 0.05;
     
     eCenter2 = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
     eRad2 = 12000;
@@ -151,7 +151,7 @@ void Particle::draw(){
         
         //Compute color
         ofColor color = ofColor::yellow;
-        float hue = ofMap( time, 0, lifeTime, 160, 175 );
+        float hue = ofMap( time, 0, lifeTime, 10, 80 );
         color.setHue( hue );
         ofSetColor( color );
         
