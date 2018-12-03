@@ -12,7 +12,7 @@ float msg[4];
 long int timer;
 int toggle = 0;
 
-int track = 4;
+int track = 2;
 //--------------------------------------------------------------
 //----------------------  Params -------------------------------
 //--------------------------------------------------------------
@@ -20,14 +20,14 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 2000;
-    velRad = 1000;
+    eRad = 1200;
+    velRad = 1200;
     lifeTime = 10.0;
-    rotate = -120;
+    rotate = 140;
     
-    force = -200;
-    spinning = -100;
-    friction = 0.22;
+    force = 1000;
+    spinning = 100;
+    friction = 0.5;
     
     eCenter2 = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
     eRad2 = 12000;
@@ -37,7 +37,7 @@ void Params::setup() {
     
     force2 = 1000;
     spinning2 = 100;
-    friction2 = 0.1;
+    friction2 = 0.15;
     
 }
 
@@ -151,7 +151,7 @@ void Particle::draw(){
         
         //Compute color
         ofColor color = ofColor::yellow;
-        float hue = ofMap( time, 0, lifeTime, 130, 220 );
+        float hue = ofMap( time, 0, lifeTime, 160, 175 );
         color.setHue( hue );
         ofSetColor( color );
         
@@ -163,7 +163,7 @@ void Particle::draw2(){
     if ( live2 ) {
         //Compute size
         float size = ofMap(
-                           fabs(time - lifeTime2/2), 0, lifeTime2/2, 1, 1 );
+                           fabs(time - lifeTime2/2), 0, lifeTime2/2, 0, 1 );
         
         //Compute color
         ofColor color = ofColor::white;
@@ -197,7 +197,7 @@ void ofApp::setup(){
     param.setup();        //Global parameters
     history = 10.0;
     bornRate = 10;
-    bornCount = 5;
+    bornCount = 10;
     
     time0 = ofGetElapsedTimef();
     history2 = 0.001;
@@ -223,7 +223,7 @@ void ofApp::update(){
                     incomingVal = m.getArgAsFloat(i);
                     msg[i] = incomingVal;
                 }
-                ofLog(OF_LOG_NOTICE, "beta 1: " + ofToString(msg[0]) + ", beta 2: " + ofToString(msg[1]) + ", beta 3: " + ofToString(msg[2]) + ", beta 4: " + ofToString(msg[3]));
+                ofLog(OF_LOG_NOTICE, "beta 1: " + ofToString(msg[3]) + ", beta 2: " + ofToString(msg[1]) + ", beta 3: " + ofToString(msg[2]) + ", beta 4: " + ofToString(msg[3]));
             }
         }
     }
@@ -278,7 +278,7 @@ void ofApp::update(){
     }
     
     //        thread.lock();
-    if (msg[0] > 0.7) {
+    if (msg[0] > 0.9) {
         if (toggle == 0){
             thread.startThread();
             thread2.startThread();
@@ -384,7 +384,7 @@ void ofApp::draw(){
     ofFill();
     //    int toggle =0;
     for (int i=0; i<p.size(); i++) {
-        if (msg[0] > 0.7) {
+        if (msg[0] > 0.9) {
             //            if (toggle == 0){
             p[i].draw2();
             //            }
