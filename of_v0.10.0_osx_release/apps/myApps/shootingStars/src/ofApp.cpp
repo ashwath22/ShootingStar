@@ -20,8 +20,8 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 500;
-    velRad = 15;
+    eRad = 2000;
+    velRad = 30;
     lifeTime = 5.0;
     rotate = 360;
     
@@ -151,7 +151,7 @@ void Particle::draw(){
         
         //Compute color
         ofColor color = ofColor::yellow;
-        float hue = ofMap( time, 0, lifeTime, 170, 255 );
+        float hue = ofMap( time, 0, lifeTime, 220, 240 );
         color.setHue( hue );
         ofSetColor( color );
         
