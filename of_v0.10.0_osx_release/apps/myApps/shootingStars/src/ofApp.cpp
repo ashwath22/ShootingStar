@@ -20,17 +20,17 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 10;
-    velRad = 3000;
-    lifeTime = 1;
-    rotate = -220;
+    eRad = 600;
+    velRad = 200;
+    lifeTime = 5.0;
+    rotate = 140;
     
-    force = 200;
+    force = 0;
     spinning = 100;
-    friction = 0.1;
+    friction = 0.2;
     
     eCenter2 = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad2 = 11000;
+    eRad2 = 12000;
     velRad2 = 100;
     lifeTime2 = 10.0;
     rotate2 = 100;
@@ -151,7 +151,7 @@ void Particle::draw(){
         
         //Compute color
         ofColor color = ofColor::yellow;
-        float hue = ofMap( time, 0, lifeTime, 150, 255 );
+        float hue = ofMap( time, 0, lifeTime, 110, 170 );
         color.setHue( hue );
         ofSetColor( color );
         
@@ -197,7 +197,7 @@ void ofApp::setup(){
     param.setup();        //Global parameters
     history = 10.0;
     bornRate = 50;
-    bornCount = 20;
+    bornCount = 10;
     
     time0 = ofGetElapsedTimef();
     history2 = 0.001;
@@ -278,7 +278,7 @@ void ofApp::update(){
     }
     
     //        thread.lock();
-    if (msg[0] > 0.65) {
+    if (msg[0] > 0.6) {
         if (toggle == 0){
             thread.startThread();
             thread2.startThread();
@@ -384,7 +384,7 @@ void ofApp::draw(){
     ofFill();
     //    int toggle =0;
     for (int i=0; i<p.size(); i++) {
-        if (msg[0] > 0.65) {
+        if (msg[0] > 0.6) {
             //            if (toggle == 0){
             p[i].draw2();
             //            }
