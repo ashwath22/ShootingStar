@@ -102,6 +102,9 @@ public:
     
     ofxOscReceiver receiver;
     ofSoundPlayer bgm;
+    ofSoundPlayer amar;
+    ofSoundPlayer appa;
+    ofSoundPlayer kaushik;
     ofSoundPlayer peak1;
     ofSoundPlayer peak2;
     ofSoundPlayer peak3;

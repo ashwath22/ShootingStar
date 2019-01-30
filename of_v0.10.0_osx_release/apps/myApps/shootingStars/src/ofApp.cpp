@@ -2,7 +2,7 @@
 
 //Listen to localhost
 //#define HOST "10.0.0.58"
-#define HOST "192.168.2.58"
+#define HOST "10.10.7.4"
 
 //create osc message object
 ofxOscMessage m;
@@ -11,6 +11,7 @@ float incomingVal;
 float msg[4];
 long int timer;
 int toggle = 0;
+float limit = 0.8;
 
 int track = 5;
 //--------------------------------------------------------------
@@ -20,24 +21,24 @@ Params param;        //Definition of global variable
 
 void Params::setup() {
     eCenter = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
-    eRad = 200;
-    velRad = 800;
+    eRad = 500;
+    velRad = 2500;
     lifeTime = 10.0;
-    rotate = 140;
+    rotate = -220;
     
-    force = 1000;
+    force = -200;
     spinning = 100;
-    friction = 0.05;
+    friction = 0.15;
     
     eCenter2 = ofPoint( ofGetWidth() / 2, ofGetHeight() / 2 );
     eRad2 = 12000;
-    velRad2 = 700;
+    velRad2 = 100;
     lifeTime2 = 10.0;
     rotate2 = 100;
     
     force2 = 1000;
     spinning2 = 100;
-    friction2 = 0.15;
+    friction2 = 0.1;
     
 }
 
@@ -151,7 +152,7 @@ void Particle::draw(){
         
         //Compute color
         ofColor color = ofColor::yellow;
-        float hue = ofMap( time, 0, lifeTime, 190, 255 );
+        float hue = ofMap( time, 0, lifeTime, 150, 255 );
         color.setHue( hue );
         ofSetColor( color );
         
@@ -196,17 +197,20 @@ void ofApp::setup(){
     //Set up parameters
     param.setup();        //Global parameters
     history = 10.0;
-    bornRate = 40;
-    bornCount = 10;
+    bornRate = 15;
+    bornCount = 15;
     
     time0 = ofGetElapsedTimef();
     history2 = 0.001;
     bornRate2 = 0.01;
     bornCount2 = 10;
-    //    bgm.setMultiPlay(true);
-    //    bgm.load("Nostalgia v2.mp3");
-    //    bgm.setLoop(true);
-    //    bgm.play();
+    bgm.setMultiPlay(true);
+    bgm.load("Nostalgia v2.mp3");
+    bgm.setLoop(true);
+    bgm.play();
+    appa.load("appa.mp3");
+    appa.setVolume(0.18);
+    appa.play();
     //    thread2.startThread();
     
 }
@@ -278,7 +282,7 @@ void ofApp::update(){
     }
     
     //        thread.lock();
-    if (msg[0] > 1.0) {
+    if (msg[0] > limit) {
         if (toggle == 0){
             thread.startThread();
             thread2.startThread();
@@ -328,16 +332,16 @@ void SoundThread::threadedFunction() {
                 track = 2;
                 break;
             case 4:
-                peak1.play();
+                peak5.play();
                 track = 5;
                 break;
             case 5:
-                peak2.play();
+                peak6.play();
                 track = 6;
                 break;
             case 6:
-                peak3.play();
-                track = 5;
+                peak7.play();
+                track = 4;
                 break;
         }
         toggle=1;
@@ -384,7 +388,7 @@ void ofApp::draw(){
     ofFill();
     //    int toggle =0;
     for (int i=0; i<p.size(); i++) {
-        if (msg[0] > 1.0) {
+        if (msg[0] > limit) {
             //            if (toggle == 0){
             p[i].draw2();
             //            }
@@ -412,3 +416,4 @@ void ofApp::exit() {
     // stop the thread
     thread.stopThread();
 }
+
